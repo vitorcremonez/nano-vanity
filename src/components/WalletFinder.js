@@ -1,6 +1,6 @@
 import React from 'react';
-
-let MyWorker = import("worker!../helpers/Vanity.js");
+import worker from '../helpers/app.worker.js';
+import WebWorker from '../helpers/WebWorker';
 
 class WalletFinder extends React.Component {
     constructor(props) {
@@ -8,16 +8,30 @@ class WalletFinder extends React.Component {
         this.state = {
             attempts: 0,
         };
-        this.worker = new MyWorker();
+
     }
 
     search() {
+        if (typeof(this.worker) === "undefined") {
+            this.worker = new WebWorker(worker);
+            this.worker.onmessage = (event) => {
+                console.log('ON WalletFinder', event.data);
+            };
+        }
+        this.worker.postMessage(this.props.prefix);
 
-        this.worker.onmessage = function(attempts) {
-            console.log(attempts);
-        };
+        //setTimeout(() => {
+        //    const vanity = new Vanity();
+        //    const wallet = vanity.findWallet(this.props.prefix, (attempts) => this.setState({attempts}));
+        //    alert(wallet.seed);
+        //}, 1000);
         //const wallet = vanity.findWallet(this.props.prefix, (attempts) => this.setState({attempts}));
         //alert(wallet.seed);
+    }
+
+    terminate() {
+        this.worker.terminate();
+        this.worker = undefined;
     }
 
     render() {
@@ -25,6 +39,9 @@ class WalletFinder extends React.Component {
             <div>
                 <button onClick={() => this.search()}>
                     search
+                </button>
+                <button onClick={() => this.terminate()}>
+                    terminate
                 </button>
                 {this.props.prefix} ({this.state.attempts})
             </div>

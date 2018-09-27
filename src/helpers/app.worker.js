@@ -1,9 +1,8 @@
-/*
 import * as nanocurrency from "nanocurrency";
 import nacl from "tweetnacl/nacl";
 
-class Vanity {
-    uint8_hex (uint8) {
+export default () => {
+    function uint8_hex (uint8) {
         let hex = "";
         let aux = null;
         for (let i = 0; i < uint8.length; i++)
@@ -17,11 +16,11 @@ class Vanity {
         return hex;
     }
 
-    generateSeed() {
-        return this.uint8_hex(nacl.randomBytes(32));
+    function generateSeed() {
+        return uint8_hex(nacl.randomBytes(32));
     }
 
-    findWallet(prefix, onAttemptIntervalTimes) {
+    function findWallet(prefix, onAttemptIntervalTimes) {
         let generated_prefix = null;
         let seed = null;
         let secret_key = null;
@@ -31,14 +30,14 @@ class Vanity {
 
         do {
             attempts++;
-            seed = this.generateSeed();
+            seed = generateSeed();
             secret_key = nanocurrency.deriveSecretKey(seed, 0);
             public_key = nanocurrency.derivePublicKey(secret_key);
             public_address = nanocurrency.deriveAddress(public_key);
             generated_prefix = public_address.substring(5, 5 + prefix.length);
 
             if (attempts%1000 === 0) {
-                onAttemptIntervalTimes(attempts);
+                setTimeout(() => onAttemptIntervalTimes(attempts), 100);
             }
         } while (generated_prefix !== prefix);
 
@@ -51,11 +50,32 @@ class Vanity {
             public_address,
         };
     }
+
+    self.addEventListener('message', event => { // eslint-disable-line no-restricted-globals
+        if (!event) return;
+        //const vanity = new Vanity();
+        console.log(findWallet(event.data));
+        //const wallet = vanity.findWallet(e.data);
+        postMessage(event.data);
+    })
+}
+
+/*
+
+
+export default () => {
+    self.addEventListener('message', e => { // eslint-disable-line no-restricted-globals
+        if (!e) return;
+        console.log('inside vanity', e);
+        let x = 0;
+        for (let i = 0; i < 1000000000; i++) {
+            x++;
+            if (i%66666666 === 0){
+                //postMessage('refresh' + i);
+            }
+        }
+
+        postMessage('ola mundo: ' + x);
+    })
 }
 */
-
-function timedCount() {
-    postMessage('xxx');
-}
-
-timedCount();
