@@ -61,7 +61,7 @@ class PrefixPicker extends React.Component {
                             outline: 'none',
                             color: 'black',
                         }}
-                        onChange={(event) => console.log(event.target)}
+                        onChange={(event) => this.props.onChangePrefix(event.target.value)}
                     />
                 </Measurer>
 

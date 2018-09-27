@@ -1,31 +1,42 @@
 import React, {Component} from 'react';
 import '../styles/App.css';
+import Header from './Header';
 import PrefixPicker from "./PrefixPicker";
+import WalletFinder from './WalletFinder';
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            numeric_prefix: '',
+            prefix: '',
+        };
+    }
+
     render() {
         return (
             <div style={{textAlign:'center'}}>
-                <div>
-                    NANO VANITY
-                </div>
+                <Header/>
                 <div style={{padding:16}}>
                     <PrefixPicker
                         onChangeNumbericPrefix={() => {
                             console.log('Changed numeric prefix!');
                         }}
-                        onChangePrefix={() => {
-                            console.log('Changed prefix!');
+                        onChangePrefix={(prefix) => {
+                            this.setState({prefix: prefix});
                         }}
                     />
-
-                    <small>attemps:</small> 60.466.176 attemps<br/>
-                    <small>extimative:</small> 60.466.176<br/>
                 </div>
                 <br/>
                 <br/>
+
+                <WalletFinder
+                    prefix={'lorem'}
+                />
+
                 <br/>
-                <button>
+                <br/>
+                <button onClick={() => alert(this.state.prefix)}>
                     FIND MY VANITY WALLET
                 </button>
 
