@@ -31,7 +31,7 @@ class App extends Component {
                 <br/>
 
                 <WalletFinder
-                    prefix={'lorem'}
+                    prefix={this.state.prefix}
                 />
 
                 <br/>

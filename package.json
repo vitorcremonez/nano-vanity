@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "nanocurrency": "^2.0.4",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-scripts": "1.1.5"
+    "react-scripts": "1.1.5",
+    "tweetnacl": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
