@@ -1,6 +1,5 @@
 import React from 'react';
-import worker from '../helpers/app.worker.js';
-import WebWorker from '../helpers/WebWorker';
+import Worker from "worker-loader!../helpers/app.worker"; /* eslint import/no-webpack-loader-syntax: off */
 
 class WalletFinder extends React.Component {
     constructor(props) {
@@ -13,9 +12,16 @@ class WalletFinder extends React.Component {
 
     search() {
         if (typeof(this.worker) === "undefined") {
-            this.worker = new WebWorker(worker);
+            this.worker = new Worker();
             this.worker.onmessage = (event) => {
-                console.log('ON WalletFinder', event.data);
+                console.log('Progress', event.data);
+                console.log(event.data);
+                this.setState({
+                    attempts: event.data.attempts
+                });
+                if (event.data.wallet) {
+                    this.terminate();
+                }
             };
         }
         this.worker.postMessage(this.props.prefix);
