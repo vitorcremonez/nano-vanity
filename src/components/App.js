@@ -3,6 +3,7 @@ import '../styles/App.css';
 import Header from './Header';
 import PrefixPicker from "./PrefixPicker";
 import WalletFinder from './WalletFinder';
+import Footer from './Footer';
 
 class App extends Component {
     constructor(props) {
@@ -27,22 +28,10 @@ class App extends Component {
                         }}
                     />
                 </div>
-                <br/>
-                <br/>
-
                 <WalletFinder
                     prefix={this.state.prefix}
                 />
-
-                <br/>
-                <br/>
-                <button onClick={() => alert(this.state.prefix)}>
-                    FIND MY VANITY WALLET
-                </button>
-
-                <div>
-                    <small>extimative:</small> 60.466.176 attemps
-                </div>
+                <Footer/>
             </div>
         );
     }

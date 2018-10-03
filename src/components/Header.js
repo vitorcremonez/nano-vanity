@@ -3,7 +3,7 @@ import NanoLogo from '../assets/images/nano-logo.png';
 
 const Header = () => {
     return (
-        <div style={{marginBottom: 100}}>
+        <div style={{marginBottom: 64}}>
             <img
                 src={NanoLogo}
                 width={150}
@@ -15,6 +15,9 @@ const Header = () => {
             }}>
                 NANO VANITY
             </div>
+            <small style={{color:'#DDD'}}>
+                version PRE-ALPHA
+            </small>
         </div>
     );
 };
