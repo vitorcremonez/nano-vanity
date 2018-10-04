@@ -1,6 +1,7 @@
 {
   "name": "nano-vanity",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "nanocurrency": "^2.0.4",
