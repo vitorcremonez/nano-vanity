@@ -1,9 +1,9 @@
 import React from 'react';
 
 const Footer = () => (
-    <div style={{padding:10, marginTop: 64, backgroundColor:'rgba(0,0,0,0.05)'}}>
-        <p>Created by Vitor Cremonez</p>
-        <p>This is a open source GitHub:</p>
+    <div className={'small p-2'} style={{marginTop:64, color:'#CCC'}}>
+        <div>Created by Vitor Cremonez</div>
+        <div>Hit ⭐️ on <a href={'https://github.com/vitorcremonez/nano-vanity'}>GitHub</a></div>
     </div>
 );
 

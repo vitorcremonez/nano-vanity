@@ -1,6 +1,9 @@
 import React from 'react';
 import Numbers from '../helpers/Numbers';
 import Worker from "worker-loader!../helpers/app.worker"; /* eslint import/no-webpack-loader-syntax: off */
+import {
+    Button,
+} from 'reactstrap';
 
 class WalletFinder extends React.Component {
     constructor(props) {
@@ -10,14 +13,21 @@ class WalletFinder extends React.Component {
             average_aps: 0,
             aps: 0,
             wallet: null,
-            isSearching: false,
+            running: false,
         };
         this.numbers = new Numbers();
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.prefix !== prevProps.prefix) {
+            this.terminate();
+            this.clean();
+        }
+    }
+
     search() {
         if (typeof(this.worker) === "undefined") {
-            this.setState({isSearching:true});
+            this.setState({running:true});
             this.worker = new Worker();
             this.worker.onmessage = (event) => {
                 if (event.data.action === "finished" && event.data.wallet) {
@@ -49,9 +59,19 @@ class WalletFinder extends React.Component {
         });
     }
 
+    clean() {
+        this.setState({
+            attempts: 0,
+            average_aps: 0,
+            aps: 0,
+            wallet: null,
+            running: false,
+        });
+    }
+
     terminate() {
         if (typeof(this.worker) !== "undefined") {
-            this.setState({isSearching:false});
+            this.setState({running:false});
             this.worker.terminate();
             this.worker = undefined;
         }
@@ -88,26 +108,28 @@ class WalletFinder extends React.Component {
     render() {
         return (
             <div>
-                <h2>
-                    {this.numbers.addThousandsSeparator(this.state.attempts)}
-                    {' '}
-                    <small>attempts</small>
-                </h2>
-                <h5 title={'average of ' + Math.round(this.state.average_aps) + ' attempts per second'}>
-                    {this.numbers.addThousandsSeparator(this.state.aps)} <small>attempts per second</small>
-                </h5>
-                <h5>
-                    <small>extimative</small> {this.numbers.addThousandsSeparator(Math.pow(32, this.props.prefix.length))} <small>attempts</small>
-                </h5>
+                <div className={'mb-3'} style={{color: this.state.running ? 'gray' : 'lightgray'}}>
+                    <h3>
+                        {this.numbers.addThousandsSeparator(this.state.attempts)}
+                        {' '}
+                        <small>attempts</small>
+                    </h3>
+                    <div title={'average of ' + Math.round(this.state.average_aps) + ' attempts per second'}>
+                        {this.numbers.addThousandsSeparator(this.state.aps)} <small>attempts per second</small>
+                    </div>
+                    <div>
+                        <small>extimative</small> {this.numbers.addThousandsSeparator(Math.pow(32, this.props.prefix.length))} <small>attempts</small>
+                    </div>
+                </div>
 
-                { this.state.isSearching ? this.renderLoading() : this.renderWallet()}
+                { !this.state.running ? this.renderWallet() : null}
 
-                <button onClick={() => this.search()}>
+                <Button outline color="primary" size="sm" onClick={() => this.search()} disabled={this.state.running}>
                     Search
-                </button>
-                <button onClick={() => this.terminate()}>
+                </Button>
+                <Button outline color="primary" size="sm" onClick={() => this.terminate()} disabled={!this.state.running} className={'ml-2'}>
                     Cancel
-                </button>
+                </Button>
             </div>
         );
     }
