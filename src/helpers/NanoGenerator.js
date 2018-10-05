@@ -22,7 +22,6 @@ class NanoGenerator {
     }
 
     generateWallet = () => {
-
         let wallet = {};
         wallet.seed = uint8_hex(nacl.randomBytes(32));
         wallet.secret_key = nanocurrency.deriveSecretKey(wallet.seed, 0);

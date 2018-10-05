@@ -31,22 +31,6 @@ class App extends Component {
                 <WalletFinder
                     prefix={this.state.prefix}
                 />
-
-                <WalletFinder
-                    prefix={this.state.prefix}
-                />
-
-                <WalletFinder
-                    prefix={this.state.prefix}
-                />
-
-                <WalletFinder
-                    prefix={this.state.prefix}
-                />
-
-                <WalletFinder
-                    prefix={this.state.prefix}
-                />
                 <Footer/>
             </div>
         );

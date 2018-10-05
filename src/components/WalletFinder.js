@@ -1,4 +1,5 @@
 import React from 'react';
+import Numbers from '../helpers/Numbers';
 import Worker from "worker-loader!../helpers/app.worker"; /* eslint import/no-webpack-loader-syntax: off */
 
 class WalletFinder extends React.Component {
@@ -11,7 +12,7 @@ class WalletFinder extends React.Component {
             wallet: null,
             isSearching: false,
         };
-
+        this.numbers = new Numbers();
     }
 
     search() {
@@ -88,15 +89,15 @@ class WalletFinder extends React.Component {
         return (
             <div>
                 <h2>
-                    {this.state.attempts.toLocaleString().replace(",",".")}
+                    {this.numbers.addThousandsSeparator(this.state.attempts)}
                     {' '}
                     <small>attempts</small>
                 </h2>
                 <h5 title={'average of ' + Math.round(this.state.average_aps) + ' attempts per second'}>
-                    {this.state.aps} <small>attempts per second</small>
+                    {this.numbers.addThousandsSeparator(this.state.aps)} <small>attempts per second</small>
                 </h5>
                 <h5>
-                    <small>extimative</small> {Math.pow(32, this.props.prefix.length).toLocaleString().replace(",",".")}
+                    <small>extimative</small> {this.numbers.addThousandsSeparator(Math.pow(32, this.props.prefix.length))} <small>attempts</small>
                 </h5>
 
                 { this.state.isSearching ? this.renderLoading() : this.renderWallet()}
