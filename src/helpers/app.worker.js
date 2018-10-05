@@ -10,7 +10,7 @@ function main() {
     let finished = 0;
     let elapsed = 0;
 
-    function findWallet(prefix) {
+    async function findWallet(prefix) {
         let generated_prefix = null;
         let seed = null;
         let secret_key = null;
@@ -22,6 +22,7 @@ function main() {
         start = Date.now();
 
         const nanogenerator = new NanoGenerator();
+        await nanogenerator.initialize();
 
         do {
             attempts++;
@@ -57,10 +58,10 @@ function main() {
         };
     }
 
-    addEventListener('message', event => { // eslint-disable-line no-restricted-globals
+    addEventListener('message', async (event) => { // eslint-disable-line no-restricted-globals
         if (event.data.action === 'start') {
             const prefix = event.data.params.prefix;
-            const wallet = findWallet(prefix);
+            const wallet = await findWallet(prefix);
             elapsed = (finished-start)/1000;
             postMessage({
                 action:'finished',
