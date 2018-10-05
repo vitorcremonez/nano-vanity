@@ -16,7 +16,7 @@ const Header = () => {
                 NANO VANITY
             </div>
             <small style={{color:'#DDD'}}>
-                version PRE-ALPHA
+                version ALPHA
             </small>
         </div>
     );

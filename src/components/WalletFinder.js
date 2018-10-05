@@ -1,5 +1,6 @@
 import React from 'react';
 import Numbers from '../helpers/Numbers';
+import WalletModal from './WalletModal';
 import Worker from "worker-loader!../helpers/app.worker"; /* eslint import/no-webpack-loader-syntax: off */
 import {
     Button,
@@ -12,6 +13,7 @@ class WalletFinder extends React.Component {
             attempts: 0,
             average_aps: 0,
             aps: 0,
+            elapsed: 0,
             wallet: null,
             running: false,
         };
@@ -64,6 +66,7 @@ class WalletFinder extends React.Component {
             attempts: 0,
             average_aps: 0,
             aps: 0,
+            elapsed: 0,
             wallet: null,
             running: false,
         });
@@ -78,12 +81,13 @@ class WalletFinder extends React.Component {
     }
 
     renderWallet = () => (
-        <div>
-            <h5>
+        <div className={'cursor-pointer mb-4'} onClick={() => this.walletModal.toggle()}>
+            <WalletModal
+                seed={this.state.wallet ? this.state.wallet.seed : undefined}
+                ref={ref => this.walletModal = ref}
+            />
+            <h5 className={'responsive-text p-2'}>
                 {this.state.wallet ? this.state.wallet.public_address : null}
-            </h5>
-            <h5>
-                {this.state.wallet ? this.state.wallet.seed : null}
             </h5>
         </div>
     );
