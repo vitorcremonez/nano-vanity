@@ -1,5 +1,4 @@
 import * as nanocurrency from 'nanocurrency';
-//let nanocurrency = require('nanocurrency');
 import nacl from 'tweetnacl/nacl';
 
 function uint8_hex (uint8) {
@@ -7,19 +6,20 @@ function uint8_hex (uint8) {
     let aux = null;
     for (let i = 0; i < uint8.length; i++)
     {
-        aux = uint8[i].toString(16).toUpperCase();
+        aux = uint8[i].toString(16);
         if(aux.length === 1)
             aux = '0'+aux;
         hex += aux;
         aux = '';
     }
-    return(hex);
+    return(hex.toUpperCase());
 }
 
 class NanoGenerator {
-    async initialize() {
+    initialize = async () => {
+        console.log(nacl.randomBytes(32));
         await nanocurrency.init();
-    }
+    };
 
     generateWallet = () => {
         let wallet = {};
@@ -28,7 +28,7 @@ class NanoGenerator {
         wallet.public_key = nanocurrency.derivePublicKey(wallet.secret_key);
         wallet.public_address = nanocurrency.deriveAddress(wallet.public_key);
         return wallet;
-    }
+    };
 }
 
 export default NanoGenerator;

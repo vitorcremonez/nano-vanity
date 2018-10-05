@@ -1,7 +1,6 @@
 import NanoGenerator from './NanoGenerator';
 
 function main() {
-    const nacl = require('tweetnacl');
     let attempts = 0;
     let nextUpdate = 0;
     let lastAttempts = 0;
@@ -12,10 +11,6 @@ function main() {
 
     async function findWallet(prefix) {
         let generated_prefix = null;
-        let seed = null;
-        let secret_key = null;
-        let public_key = null;
-        let public_address = null;
         let now = null;
         let wallet = null;
 
@@ -28,9 +23,6 @@ function main() {
             attempts++;
             now = Date.now();
             wallet = nanogenerator.generateWallet();
-            secret_key = wallet.secret_key;
-            public_key = wallet.public_key;
-            public_address = wallet.public_address;
             generated_prefix = wallet.public_address.substring(5, 5 + prefix.length);
 
             if (now > nextUpdate) {
@@ -50,12 +42,7 @@ function main() {
 
         finished = Date.now();
 
-        return {
-            seed,
-            secret_key,
-            public_key,
-            public_address,
-        };
+        return wallet;
     }
 
     addEventListener('message', async (event) => { // eslint-disable-line no-restricted-globals
