@@ -17,7 +17,6 @@ function uint8_hex (uint8) {
 
 class NanoGenerator {
     initialize = async () => {
-        console.log(nacl.randomBytes(32));
         await nanocurrency.init();
     };
 

@@ -4,7 +4,10 @@ import WalletModal from './WalletModal';
 import Worker from "worker-loader!../helpers/app.worker"; /* eslint import/no-webpack-loader-syntax: off */
 import {
     Button,
+    UncontrolledTooltip,
+    UncontrolledCollapse,
 } from 'reactstrap';
+import moment from 'moment';
 
 class WalletFinder extends React.Component {
     constructor(props) {
@@ -23,7 +26,7 @@ class WalletFinder extends React.Component {
     componentDidUpdate(prevProps) {
         if (this.props.prefix !== prevProps.prefix) {
             this.terminate();
-            this.clean();
+            this.clean(true);
         }
     }
 
@@ -33,7 +36,6 @@ class WalletFinder extends React.Component {
             this.worker = new Worker();
             this.worker.onmessage = (event) => {
                 if (event.data.action === "finished" && event.data.wallet) {
-                    console.log('Terminate', event.data);
                     this.setState({
                         wallet: event.data.wallet,
                         aps: event.data.aps,
@@ -43,7 +45,6 @@ class WalletFinder extends React.Component {
                     });
                     this.terminate();
                 } else if (event.data.action === "update") {
-                    console.log('Update', event.data);
                     this.setState({
                         aps: event.data.aps,
                         attempts: event.data.attempts,
@@ -61,13 +62,14 @@ class WalletFinder extends React.Component {
         });
     }
 
-    clean() {
+    clean(preserveWallet = false) {
+        console.log('clean');
         this.setState({
             attempts: 0,
             average_aps: 0,
             aps: 0,
             elapsed: 0,
-            wallet: null,
+            wallet: preserveWallet ? this.state.wallet : null,
             running: false,
         });
     }
@@ -92,24 +94,24 @@ class WalletFinder extends React.Component {
         </div>
     );
 
-    renderLoading() {
-        return (
-            <div style={{padding:10}}>
-                <img
-                    title={`Nano Vanity is working at maximum to find a wallet with public address prefix "${this.props.prefix}"...`}
-                    src={'https://media.giphy.com/media/BmmfETghGOPrW/giphy.gif'}
-                    style={{
-                        maxWidth: 400,
-                        width: '100%',
-                        boxShadow:'0px 5px 20px -10px black',
-                        borderRadius:5,
-                    }}
-                />
-            </div>
-        );
+    getExtimative(extimative_attempts, average_aps) {
+        let extimative_seconds = Math.round(extimative_attempts / this.state.average_aps);
+        let isOverEvaluated = false;
+        if (extimative_seconds > 126144000000) { // 4k years =S
+            isOverEvaluated = true;
+        }
+        if (!this.props.isValidPrefix) {
+            return 'Insert a valid prefix, or wait forever!'
+        }
+        if (average_aps === 0) {
+            return 'Press search to calculate it...';
+        }
+        return isOverEvaluated ? 'It is too much thousands years... Just give up!' : moment().add(extimative_seconds, 'seconds').fromNow(true);
     }
 
     render() {
+        const extimative_attempts = this.props.isValidPrefix ? Math.pow(32, this.props.prefix.length) : Infinity;
+
         return (
             <div>
                 <div className={'mb-3'} style={{color: this.state.running ? 'gray' : 'lightgray'}}>
@@ -118,15 +120,25 @@ class WalletFinder extends React.Component {
                         {' '}
                         <small>attempts</small>
                     </h3>
-                    <div title={'average of ' + Math.round(this.state.average_aps) + ' attempts per second'}>
+                    <div id={'aps'}>
+                        <UncontrolledTooltip placement="top" target={'aps'}>
+                            {'average ' + this.numbers.addThousandsSeparator(Math.round(this.state.average_aps)) + ' aps'}
+                        </UncontrolledTooltip>
                         {this.numbers.addThousandsSeparator(this.state.aps)} <small>attempts per second</small>
                     </div>
                     <div>
-                        <small>extimative</small> {this.numbers.addThousandsSeparator(Math.pow(32, this.props.prefix.length))} <small>attempts</small>
+                        <div className={'cursor-pointer'} id={'extimative-toggler'}>
+                            <small>extimative</small> {this.numbers.addThousandsSeparator(extimative_attempts)} <small>attempts</small>
+                        </div>
+                        <UncontrolledCollapse toggler="#extimative-toggler">
+                            <div className={'small'}>
+                                { this.getExtimative(extimative_attempts, this.state.average_aps) }
+                            </div>
+                        </UncontrolledCollapse>
                     </div>
                 </div>
 
-                { !this.state.running ? this.renderWallet() : null}
+                { !this.state.running && this.state.wallet ? this.renderWallet() : null}
 
                 <Button outline color="primary" size="sm" onClick={() => this.search()} disabled={this.state.running}>
                     Search

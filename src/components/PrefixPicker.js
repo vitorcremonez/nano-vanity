@@ -76,9 +76,10 @@ class PrefixPicker extends React.Component {
                             onChange={(event) => {
                                 const prefix = event.target.value;
                                 this.setState({prefix:prefix});
-                                this.props.onChangePrefix(prefix);
+                                this.props.onChangePrefix(prefix, this.isValidPrefix(prefix));
                             }}
                             maxLength={59}
+                            autocapitalize={'none'}
                         />
                     </Measurer>
 
@@ -88,7 +89,7 @@ class PrefixPicker extends React.Component {
 
                     <Measurer length={59 - this.state.prefix.length}>
                         <span className={'prefix-picker-letter'}>
-                            xxx...xxx
+                            xx...xx
                         </span>
                     </Measurer>
                 </div>

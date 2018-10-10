@@ -12,6 +12,7 @@ const Bracket = ({side}) => {
 
     return (
         <img
+            alt={side === 'left' ? '(' : ')'}
             src={image}
             height={54}
             style={{

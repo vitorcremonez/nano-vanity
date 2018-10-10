@@ -11,6 +11,7 @@ class App extends Component {
         this.state = {
             numeric_prefix: '',
             prefix: '',
+            isValidPrefix: true,
         };
     }
 
@@ -23,13 +24,17 @@ class App extends Component {
                         onChangeNumbericPrefix={() => {
                             console.log('Changed numeric prefix!');
                         }}
-                        onChangePrefix={(prefix) => {
-                            this.setState({prefix: prefix});
+                        onChangePrefix={(prefix, isValidPrefix) => {
+                            this.setState({
+                                prefix: prefix,
+                                isValidPrefix: isValidPrefix,
+                            });
                         }}
                     />
                 </div>
                 <WalletFinder
                     prefix={this.state.prefix}
+                    isValidPrefix={this.state.isValidPrefix}
                 />
                 <Footer/>
             </div>
