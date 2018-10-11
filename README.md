@@ -4,7 +4,7 @@
 
 Client side NANO Vanity wallet generator. Acessible via browser.
 
-<img src="https://i.imgur.com/TyZrHzR.png" width="265"/>
+<img src="https://i.imgur.com/TyZrHzR.png" width="365"/>
 
 ## Demo
 
