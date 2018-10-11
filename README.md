@@ -1,4 +1,4 @@
-<img src="https://i.imgur.com/sxg7d44.png" width="265"/>
+<img src="https://i.imgur.com/p5IMaf7.png"/>
 
 ## Nano Vanity
 
