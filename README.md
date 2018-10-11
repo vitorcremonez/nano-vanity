@@ -1,8 +1,10 @@
+<img src="https://i.imgur.com/sxg7d44.png" width="265"/>
+
 ## Nano Vanity
 
 Client side NANO Vanity wallet generator. Acessible via browser.
 
-<img src="/src/assets/images/paper_wallet.jpg" width="165"/>
+<img src="https://i.imgur.com/TyZrHzR.png" width="265"/>
 
 ## Demo
 
